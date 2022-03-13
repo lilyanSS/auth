@@ -11,6 +11,12 @@ export class User {
     @Column()
     lastName: string;
 
+    @Column({ unique: true })
+    email: string;
+
+    @Column({ type: 'varchar', length: '250' })
+    password: string;
+
     @Column({ default: true })
     isActive: boolean;
 }

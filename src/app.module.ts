@@ -1,12 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import configuration from './config/configuration';
-import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
+import { AppController } from './app.controller';
+import configuration from './config/configuration';
+import { UsersModule } from './schemas/users/user.module';
 @Module({
   imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      debug: true,
+      typePaths: ['./**/*.gql'],
+    }),
     TypeOrmModule.forRoot(configuration),
     UsersModule,
   ],
@@ -16,4 +23,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 
 export class AppModule { }
-console.log("proces2:", process.env.DATABASE_HOST, process.env.DATABASE_NAME)
+
