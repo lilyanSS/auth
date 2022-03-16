@@ -7,9 +7,14 @@ type User {
 	password: String
 }
 
+type UserData {
+    token:String,
+    data:User
+}
+
 
 type Query{
-    userLogin(email:String!, password:String!): User
+    userLogin(email:String!, password:String!): UserData
 }
 
 type Mutation{

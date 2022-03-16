@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException, NotAcceptableException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/db/user.entity';
+import { JwtService } from '@nestjs/jwt';
 import { Repository, Connection } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+
+import { User } from 'src/db/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -10,17 +12,34 @@ export class UsersService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
         private connection: Connection,
+        private readonly nestJwt: JwtService
     ) { }
 
     async userLogin(
         email: string,
         password: string
-    ): Promise<User> {
-        const user = await this.userRepository.findOne({ where: { email, password } });
+    ): Promise<any> {
+        const user = await this.userRepository.findOne({ where: { email } });
+        const isPasswordMatching = await bcrypt.compare(
+            password,
+            user.password
+        );
+
         if (!user) {
             throw new NotFoundException(`User ${email} does not exist`);
         }
-        return user
+
+        if (!isPasswordMatching) {
+            throw new NotAcceptableException('the password is incorrect');
+        }
+        const payload = { userId: user.id, email:user.email };
+        const token = this.nestJwt.sign(payload);
+
+        const data = {
+            data: user,
+            token
+        }
+        return data;
     }
 
     async createUser(

@@ -7,6 +7,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app.controller';
 import configuration from './config/configuration';
 import { UsersModule } from './schemas/users/user.module';
+import { AuthModule } from './schemas/auth/auth.module';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -16,6 +17,7 @@ import { UsersModule } from './schemas/users/user.module';
     }),
     TypeOrmModule.forRoot(configuration),
     UsersModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
