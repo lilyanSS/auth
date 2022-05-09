@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import configuration from './config/configuration';
 import { UsersModule } from './schemas/users/user.module';
 import { AuthModule } from './schemas/auth/auth.module';
+import { RoleModule } from './schemas/role/role.module';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -17,10 +18,12 @@ import { AuthModule } from './schemas/auth/auth.module';
     }),
     TypeOrmModule.forRoot(configuration),
     UsersModule,
-    AuthModule
+    AuthModule,
+    forwardRef(() => RoleModule),
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports: [TypeOrmModule]
 })
 
 
