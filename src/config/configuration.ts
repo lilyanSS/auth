@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
-require('dotenv').config()
+
 const config: TypeOrmModuleOptions = {
     type: 'mysql',
     host: process.env.DATABASE_HOST,
