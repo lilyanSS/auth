@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository, Connection } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-import { User } from 'src/db/user.entity';
+import { User } from 'src/db/models/user.entity';
 
 @Injectable()
 export class UsersService {

@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Role } from './role.entity'
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -18,5 +18,13 @@ export class User {
     password: string;
 
     @Column({ default: true })
-    isActive: boolean;
+    active: boolean;
+
+    @OneToOne(
+        () => Role,
+        role => role.user
+    )
+
+    @JoinColumn()
+    role: Role
 }
