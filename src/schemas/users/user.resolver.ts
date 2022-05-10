@@ -1,6 +1,8 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './user.service';
-import { User } from '../../db/user.entity';
+import { User } from '../../db/models/user.entity';
+import { Public } from '../auth/guards/jwt-auth.guard';
+
 @Resolver(() => User)
 export class UsersResolver {
     constructor(
@@ -8,6 +10,7 @@ export class UsersResolver {
     ) { }
 
     @Query()
+    @Public()
     async userLogin(
         @Args('email') email: string,
         @Args('password') password: string,
@@ -15,6 +18,7 @@ export class UsersResolver {
         return this.userService.userLogin(email, password);
     }
 
+    @Public()
     @Mutation()
     async createUser(
         @Args('email') email: string,
