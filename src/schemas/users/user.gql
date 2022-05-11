@@ -2,7 +2,7 @@ type User {
     id: Int,
     firstName:String
     lastName:String
-    isActive:Boolean
+    active:Boolean
     email: String
 	password: String
 }
@@ -15,8 +15,10 @@ type UserData {
 
 type Query{
     userLogin(email:String!, password:String!): UserData
+    getUserDataById(userId:Int!):User
+    getUsers:[User]
 }
 
 type Mutation{
-    createUser(email:String!, password:String!, firstName:String!, lastName:String!): User
+    createUser(email:String!, password:String!, firstName:String!, lastName:String!, isAdmin:Boolean!): UserData
 }
