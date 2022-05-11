@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Connection } from 'typeorm';
 import { Role } from '../../models/role.entity';
-import { roles } from './data';
+import { Rol } from './data';
 
 @Injectable()
 export class RoleSeederService {
@@ -13,9 +13,10 @@ export class RoleSeederService {
     ) { }
 
     create(): Array<Promise<Role>> {
-        return roles.map(async (r) => {
+        const rol = Object.values(Rol);
+        return rol.map(async (r) => {
             return await this.roleRepository
-                .findOne({ name: r.name })
+                .findOne({ name: r })
                 .then(async dbRol => {
                     if (dbRol) {
                         return Promise.resolve(null);
@@ -25,7 +26,7 @@ export class RoleSeederService {
                     await queryRunner.startTransaction();
                     try {
                         const createRol = {
-                            name: r.name
+                            name: r
                         }
                         const data = await this.roleRepository.create(createRol);
                         await queryRunner.manager.save(data);
